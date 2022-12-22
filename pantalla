@@ -1,0 +1,263 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
+//import 'package:phonectedflutter2/Crearcuenta.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:phonectedflutter2/ActualizacionInfo.dart';
+import 'package:phonectedflutter2/Eliminarcuentanom.dart';
+import 'package:phonectedflutter2/Ingresarcliente.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:phonectedflutter2/NoRestriccion.dart';
+import 'Infoestablecimientocliente.dart';
+import 'package:phonectedflutter2/Verdatos.dart';
+
+import 'Iniciarsesion.dart';
+
+class Verlodatos extends StatefulWidget{
+  @override
+  VerlApp createState () => VerlApp();
+}
+
+class VerlApp extends State<Verlodatos>{
+  final user = FirebaseAuth.instance.currentUser!;
+  final nom = TextEditingController();
+  final numuno = TextEditingController();
+  final numdos = TextEditingController();
+  final desc = TextEditingController();
+  final face = TextEditingController();
+  final twi = TextEditingController();
+  final web = TextEditingController();
+  final direc = TextEditingController();
+  List<String> docIDs = [];
+  _fetch() async {
+    final user = await FirebaseAuth.instance.currentUser!;
+    if (user != null)
+      await FirebaseFirestore.instance.collection('users').doc(user.uid)
+          .get()
+          .then((ds) {
+        nom.text = ds.get('Nombre');
+        numuno.text = ds.get('Número de telefono 1');
+        numdos.text = ds.get('Número de telefono 2');
+        desc.text = ds.get('Descripcion');
+        face.text = ds.get('URL Facebook');
+        twi.text = ds.get('URL Twitter');
+        web.text = ds.get('URL sitio web');
+        direc.text = ds.get('Direccion');
+        print(nom);
+        print(numuno);
+        print(numdos);
+        print(desc);
+        print(face);
+        print(twi);
+        print(web);
+        print(direc);
+      });
+  }
+  @override
+  void initState(){
+    _fetch();
+    super.initState();
+  }
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'PhoNected',
+      home: Scaffold(
+        extendBodyBehindAppBar: true,
+        backgroundColor: Color(0xFFffff8d),
+        appBar: AppBar(
+          toolbarHeight: 110,
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back),
+            color: Colors.black,
+            iconSize: 35,
+            onPressed: () => Navigator.push(context,MaterialPageRoute(builder: (_)=> NoRestriccion()) ),
+          ),
+          title: Column(
+            children: [
+              Text('PhoNected',
+                  style: TextStyle(color: Colors.black, fontSize: 30)),
+              Text(user.email!,style: TextStyle(color: Colors.black, fontSize: 17)),
+            ],
+          ),
+          centerTitle: true,
+          flexibleSpace: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.only(bottomLeft: Radius.circular(30), bottomRight: Radius.circular(30)),
+              gradient: LinearGradient(
+                  colors: [Color(0xFFffff00),Colors.orangeAccent],
+                  begin: Alignment.bottomCenter,
+                  end: Alignment.topCenter
+              ),
+            ),
+          ),
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+        ),
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              Padding(padding: EdgeInsets.only(left: 20,top: 170,right: 10),
+                child: Center(
+                  child: Text('Nombre del establecimiento',style: TextStyle(fontSize: 18)),
+                ),
+              ),
+              Padding(padding: EdgeInsets.only(left: 20,top: 20, right: 10),
+                child: Center(
+                  child: TextField(
+                    enabled: false,
+                    controller: nom,
+                    decoration: InputDecoration(
+                      hintText: '',
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(20)
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              Padding(padding: EdgeInsets.only(left: 20,top: 20,right: 10),
+                child: Center(
+                  child: Text('Número Principal',style: TextStyle(fontSize: 18)),
+                ),
+              ),
+              Padding(padding: EdgeInsets.only(left: 20,top: 20, right: 10),
+                child: Center(
+                  child: TextField(
+                    enabled: false,
+                    controller: numuno,
+                    decoration: InputDecoration(
+                      hintText: '',
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(20)
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              Padding(padding: EdgeInsets.only(left: 20,top: 20,right: 10),
+                child: Center(
+                  child: Text('Número Secundario',style: TextStyle(fontSize: 18)),
+                ),
+              ),
+              Padding(padding: EdgeInsets.only(left: 20,top: 20, right: 10),
+                child: Center(
+                  child: TextField(
+                    enabled: false,
+                    controller: numdos,
+
+                    decoration: InputDecoration(
+                      hintText: '',
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(20)
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              Padding(padding: EdgeInsets.only(left: 20,top: 20,right: 10),
+                child: Center(
+                  child: Text('Descripción del establecimiento',style: TextStyle(fontSize: 18)),
+                ),
+              ),
+              Padding(padding: EdgeInsets.only(left: 20,top: 20, right: 10),
+                child: Center(
+                  child: TextField(
+                    enabled: false,
+                    controller: desc,
+
+                    decoration: InputDecoration(
+                      hintText: '',
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(20)
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              Padding(padding: EdgeInsets.only(left: 20,top: 20,right: 10),
+                child: Center(
+                  child: Text('Facebook',style: TextStyle(fontSize: 18)),
+                ),
+              ),
+              Padding(padding: EdgeInsets.only(left: 20,top: 20, right: 10),
+                child: Center(
+                  child: TextField(
+                    enabled: false,
+                    controller: face,
+
+                    decoration: InputDecoration(
+                      hintText: '',
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(20)
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              Padding(padding: EdgeInsets.only(left: 20,top: 20,right: 10),
+                child: Center(
+                  child: Text('Twitter',style: TextStyle(fontSize: 18)),
+                ),
+              ),
+              Padding(padding: EdgeInsets.only(left: 20,top: 20, right: 10),
+                child: Center(
+                  child: TextField(
+                    enabled: false,
+                    controller: twi,
+
+                    decoration: InputDecoration(
+                      hintText: '',
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(20)
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              Padding(padding: EdgeInsets.only(left: 20,top: 20,right: 10),
+                child: Center(
+                  child: Text('Sitio web',style: TextStyle(fontSize: 18)),
+                ),
+              ),
+              Padding(padding: EdgeInsets.only(left: 20,top: 20, right: 10),
+                child: Center(
+                  child: TextField(
+                    enabled: false,
+                    controller: web,
+
+                    decoration: InputDecoration(
+                      hintText: '',
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(20)
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              Padding(padding: EdgeInsets.only(left: 20,top: 20,right: 10),
+                child: Center(
+                  child: Text('Dirección del establecimiento',style: TextStyle(fontSize: 18)),
+                ),
+              ),
+              Padding(padding: EdgeInsets.only(left: 20,top: 20, right: 10),
+                child: Center(
+                  child: TextField(
+                    enabled: false,
+                    controller: direc,
+
+                    decoration: InputDecoration(
+                      hintText: '',
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(20)
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
